@@ -1,7 +1,7 @@
 <h1 align="center">Valorant Skin Checker</h1>
 -----
 ```
-⚠️ Accountformat is user:password 
+⚠️ Account format is user:password 
 ```
 -----
 - [X] **Region Check**
