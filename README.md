@@ -1,5 +1,4 @@
 <h1 align="center">Valorant Skin Checker</h1>
------
 
 # ⚠️ Account format is user:password 
 
