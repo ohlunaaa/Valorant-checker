@@ -7,3 +7,5 @@
 
 # Update 1.1
 - fixing some bugs
+- added custom Region output
+- added Show If Account is banned
