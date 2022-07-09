@@ -87,7 +87,7 @@ def checker():
             banneds = open("results//banned.txt", "a+")
             banneds.write(f"[--------------[Valorant]--------------]\n| User&Pass: {username}:{password}\n| Type: banned\n")
             banneds.close()
-            time.sleep(3)
+            return
             
 
         r = session.post('https://auth.riotgames.com/userinfo', headers=headers, json={})
