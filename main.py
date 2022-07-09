@@ -74,7 +74,7 @@ def checker():
             banneds.write(f"[--------------[Valorant]--------------]\n| User&Pass: {username}:{password}\n| Type: banned\n")
             banneds.close()
             time.sleep(3)
-            checker()
+            
         try:
             headers = {
                 'User-Agent': 'RiotClient/51.0.0.4429735.4381201 rso-auth (Windows;10;;Professional, x64)',
@@ -88,7 +88,7 @@ def checker():
             banneds.write(f"[--------------[Valorant]--------------]\n| User&Pass: {username}:{password}\n| Type: banned\n")
             banneds.close()
             time.sleep(3)
-            checker()
+            
 
         r = session.post('https://auth.riotgames.com/userinfo', headers=headers, json={})
         data = r.json()
